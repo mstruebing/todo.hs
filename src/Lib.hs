@@ -6,9 +6,11 @@ import System.Directory
 import System.IO
 import Data.Char
 
+-- filename of the todo file
 fileName :: String
 fileName = ".todo"
 
+-- filepath of the todo file
 todoFile :: IO FilePath
 todoFile = do
     homeDir <- getHomeDirectory
@@ -19,6 +21,7 @@ someFunc = do
     fileAvailable <- todoFileAvailable
     if fileAvailable then printFile else createFileIfNotExists
 
+-- If no todo file exists it will ask the user to create one
 createFileIfNotExists :: IO ()
 createFileIfNotExists = do
     putStrLn "No todo-file available (~/.todo)"
@@ -30,18 +33,21 @@ createFileIfNotExists = do
     else 
         return ()
 
+-- creates the todo file with a sample entry
 createFile :: IO ()
 createFile = do
     file <- todoFile
     writeFile file "sample entry"
     putStrLn "File created"
 
+-- prints the content of the todo file
 printFile :: IO ()
 printFile = do
     file <- todoFile
     contents <- readFile file
     putStr contents
 
+-- checks if the todo file is available
 todoFileAvailable :: IO Bool
 todoFileAvailable = do
     file <- todoFile
