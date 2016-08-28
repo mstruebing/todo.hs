@@ -6,8 +6,13 @@ import System.Directory
 import System.IO
 import Data.Char
 
-todo_file :: String
-todo_file = ".todo"
+fileName :: String
+fileName = ".todo"
+
+todoFile :: IO FilePath
+todoFile = do
+    homeDir <- getHomeDirectory
+    pure (homeDir ++ "/" ++ fileName)
 
 someFunc :: IO ()
 someFunc = do
@@ -17,30 +22,28 @@ someFunc = do
 createFileIfNotExists :: IO ()
 createFileIfNotExists = do
     putStrLn "No todo-file available (~/.todo)"
-    putStrLn "Would you like to create an empty file? [Y/N]"
+    putStrLn "Would you like to create an empty file? [Y/N]:"
     input <- getChar
     if ((toUpper input) == 'Y') 
-    then do 
-        putStrLn "Will create file" 
+    then 
         createFile
     else 
         return ()
-    return ()
 
 createFile :: IO ()
 createFile = do
-    homeDirectory <- getHomeDirectory
-    writeFile (homeDirectory ++ "/" ++ todo_file) "sample entry"
-    return ()
+    file <- todoFile
+    writeFile file "sample entry"
+    putStrLn "File created"
 
 printFile :: IO ()
 printFile = do
-    homeDirectory <- getHomeDirectory
-    contents <- readFile (homeDirectory ++ "/" ++ todo_file)
+    file <- todoFile
+    contents <- readFile file
     putStr contents
 
 todoFileAvailable :: IO Bool
 todoFileAvailable = do
-    homeDirectory <- getHomeDirectory
-    exists <- doesFileExist (homeDirectory ++ "/" ++ todo_file)
+    file <- todoFile
+    exists <- doesFileExist file
     pure exists
