@@ -3,14 +3,24 @@ module Lib
     ) where
 
 import System.Directory
+import System.IO
+
+todo_file :: String
+todo_file = ".todo"
 
 someFunc :: IO ()
-someFunc = homeDirectoryAvailable >>= print
---    exists <- homeDirectoryAvailable
---    print exists
+someFunc = do
+    fileAvailable <- todoFileAvailable
+    if fileAvailable then printFile else putStrLn "No file available"
 
-homeDirectoryAvailable :: IO Bool
-homeDirectoryAvailable  = do
+printFile :: IO ()
+printFile = do
     homeDirectory <- getHomeDirectory
-    exists <- doesDirectoryExist homeDirectory
+    contents <- readFile (homeDirectory ++ "/" ++ todo_file)
+    putStr contents
+
+todoFileAvailable :: IO Bool
+todoFileAvailable = do
+    homeDirectory <- getHomeDirectory
+    exists <- doesFileExist (homeDirectory ++ "/" ++ todo_file)
     pure exists
