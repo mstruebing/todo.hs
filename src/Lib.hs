@@ -1,8 +1,9 @@
 module Lib
     ( 
-        todoFileAvailable,
+        addTodo,
+        createTodoFile,
         printFile,
-        createFileIfNotExists
+        todoFileAvailable,
     ) where
 
 import System.Directory
@@ -20,8 +21,8 @@ todoFile = do
     pure (homeDir ++ "/" ++ fileName)
 
 -- If no todo file exists it will ask the user to create one
-createFileIfNotExists :: IO ()
-createFileIfNotExists = do
+createTodoFile :: IO ()
+createTodoFile = do
     putStrLn "No todo-file available (~/.todo)"
     putStrLn "Would you like to create an empty file? [Y/N]:"
     input <- getChar
@@ -35,16 +36,23 @@ createFileIfNotExists = do
 createFile :: IO ()
 createFile = do
     file <- todoFile
-    writeFile file "sample entry"
+    writeFile file "sample entry\n"
     putStrLn "File created"
+
+-- adds a todo
+addTodo :: String -> IO ()
+addTodo x = do
+    file <- todoFile
+    appendFile file $ x ++ "\n"
 
 -- prints the content of the todo file
 printFile :: IO ()
 printFile = do
     file <- todoFile
-    contents <- readFile file
-    putStr contents
-    putStr "\n"
+    withFile file ReadMode (\handle -> do
+        hSetBuffering handle $ LineBuffering
+        contents <- hGetContents handle
+        putStr contents)
 
 -- checks if the todo file is available
 todoFileAvailable :: IO Bool
