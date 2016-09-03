@@ -52,10 +52,15 @@ printFile = do
     withFile file ReadMode (\handle -> do
         hSetBuffering handle $ LineBuffering
         contents <- hGetContents handle
-        print $ generateNumberedList contents
+        printTodos $ generateNumberedList contents
         )
 
--- somehow hacky
+-- print the todolist
+-- #. TODOENTRY
+printTodos :: [(Int, String)] -> IO ()
+printTodos xs = mapM_ (\(a, b) -> putStrLn $ show a ++ ". " ++ b) xs
+
+-- generates a numbered list to identify todos
 generateNumberedList :: String -> [(Int, String)]
 generateNumberedList todos = zip [1 .. numberOfTodos] todoList 
     where
