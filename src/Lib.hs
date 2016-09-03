@@ -52,7 +52,15 @@ printFile = do
     withFile file ReadMode (\handle -> do
         hSetBuffering handle $ LineBuffering
         contents <- hGetContents handle
-        putStr contents)
+        print $ generateNumberedList contents
+        )
+
+-- somehow hacky
+generateNumberedList :: String -> [(Int, String)]
+generateNumberedList todos = zip [1 .. numberOfTodos] todoList 
+    where
+        numberOfTodos = length todoList
+        todoList = lines todos
 
 -- checks if the todo file is available
 todoFileAvailable :: IO Bool
