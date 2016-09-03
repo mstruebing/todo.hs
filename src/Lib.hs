@@ -1,5 +1,8 @@
 module Lib
-    ( someFunc
+    ( 
+        todoFileAvailable,
+        printFile,
+        createFileIfNotExists
     ) where
 
 import System.Directory
@@ -15,11 +18,6 @@ todoFile :: IO FilePath
 todoFile = do
     homeDir <- getHomeDirectory
     pure (homeDir ++ "/" ++ fileName)
-
-someFunc :: IO ()
-someFunc = do
-    fileAvailable <- todoFileAvailable
-    if fileAvailable then printFile else createFileIfNotExists
 
 -- If no todo file exists it will ask the user to create one
 createFileIfNotExists :: IO ()
@@ -46,6 +44,7 @@ printFile = do
     file <- todoFile
     contents <- readFile file
     putStr contents
+    putStr "\n"
 
 -- checks if the todo file is available
 todoFileAvailable :: IO Bool
