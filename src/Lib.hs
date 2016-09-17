@@ -20,24 +20,11 @@ todoFile = do
     homeDir <- getHomeDirectory
     pure (homeDir ++ "/" ++ fileName)
 
--- If no todo file exists it will ask the user to create one
+-- creates the todo file with a sample entry
 createTodoFile :: IO ()
 createTodoFile = do
-    putStrLn "No todo-file available (~/.todo)"
-    putStrLn "Would you like to create an empty file? [Y/N]:"
-    input <- getChar
-    if ((toUpper input) == 'Y') 
-    then 
-        createFile
-    else 
-        return ()
-
--- creates the todo file with a sample entry
-createFile :: IO ()
-createFile = do
     file <- todoFile
     writeFile file ""
-    putStrLn "File created"
 
 -- adds a todo
 addTodo :: String -> IO ()
