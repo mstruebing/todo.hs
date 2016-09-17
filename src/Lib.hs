@@ -36,7 +36,7 @@ createTodoFile = do
 createFile :: IO ()
 createFile = do
     file <- todoFile
-    writeFile file "sample entry\n"
+    writeFile file ""
     putStrLn "File created"
 
 -- adds a todo
