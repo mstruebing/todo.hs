@@ -3,6 +3,7 @@ module Lib
         addTodo,
         createTodoFile,
         printFile,
+        removeTodo,
         todoFileAvailable,
     ) where
 
@@ -54,9 +55,20 @@ generateNumberedList todos = zip [1 .. numberOfTodos] todoList
         numberOfTodos = length todoList
         todoList = lines todos
 
+-- deletes a todo from a list
+removeTodo :: Int -> IO ()
+removeTodo x = do
+    file <- todoFile
+    contents <- fmap lines $ readFile file
+    length contents `seq` (writeFile file $ process x contents)
+        where
+            process x contents = unlines $ concat [take (x - 1) contents, drop x contents]
+    
+
 -- checks if the todo file is available
 todoFileAvailable :: IO Bool
 todoFileAvailable = do
     file <- todoFile
     exists <- doesFileExist file
     pure exists
+
