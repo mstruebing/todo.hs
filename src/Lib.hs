@@ -60,7 +60,10 @@ removeTodo :: Int -> IO ()
 removeTodo x = do
     file <- todoFile
     contents <- fmap lines $ readFile file
-    putStr $ unlines $ concat [take (x - 1) contents, drop x contents]
+    length contents `seq` (writeFile file $ process x contents)
+        where
+            process x contents = unlines $ concat [take (x - 1) contents, drop x contents]
+    
 
 -- checks if the todo file is available
 todoFileAvailable :: IO Bool
