@@ -58,7 +58,8 @@ generateNumberedList todos = zip [1 .. numberOfTodos] todoList
 -- deletes a todo from a list
 removeTodo :: Int -> IO ()
 removeTodo x = do
-    contents <- fmap lines $ readFile "/home/maex/.todo"
+    file <- todoFile
+    contents <- fmap lines $ readFile file
     putStr $ unlines $ concat [take (x - 1) contents, drop x contents]
 
 -- checks if the todo file is available
