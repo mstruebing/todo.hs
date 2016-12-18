@@ -40,8 +40,7 @@ printFile = do
     withFile file ReadMode (\handle -> do
         hSetBuffering handle $ LineBuffering
         contents <- hGetContents handle
-        printTodos $ generateNumberedList contents
-        )
+        printTodos $ generateNumberedList contents)
 
 -- print the todolist
 -- #. TODOENTRY
@@ -67,8 +66,15 @@ removeTodo x = do
 
 -- checks if the todo file is available
 todoFileAvailable :: IO Bool
-todoFileAvailable = do
-    file <- todoFile
-    exists <- doesFileExist file
-    pure exists
+todoFileAvailable = doesFileExist =<< todoFile
+
+-- is the same as
+--todoFileAvailable = do
+--    file <- todoFile
+--    exists <- doesFileExist file
+--    pure exists
+-- and
+--todoFileAvailable = do
+--    file <- todoFile
+--    doesFileExist file
 
