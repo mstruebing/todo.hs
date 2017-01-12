@@ -49,10 +49,7 @@ printTodos xs = mapM_ (\(a, b) -> putStrLn $ show a ++ ". " ++ b) xs
 
 -- generates a numbered list to identify todos
 generateNumberedList :: String -> [(Int, String)]
-generateNumberedList todos = zip [1 .. numberOfTodos] todoList 
-    where
-        numberOfTodos = length todoList
-        todoList = lines todos
+generateNumberedList = zip [1 ..] . lines 
 
 -- deletes a todo from a list
 removeTodo :: Int -> IO ()

@@ -6,7 +6,7 @@ homepage:            https://github.com/mstruebing/todo.hs
 license:             MIT
 license-file:        LICENSE
 author:              Max Strübing
-maintainer:          max_struebing@gmx.de
+maintainer:          mxstrbng@gmail.com
 copyright:           2016 Max Strübing
 category:            CLI
 build-type:          Simple
