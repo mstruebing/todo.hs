@@ -3,6 +3,7 @@ module Main where
 import Options.Applicative
 import Lib
 import Data.Char
+import Data.Monoid((<>))
 
 data TodoApp = TodoApp { 
       todo :: Maybe String 
