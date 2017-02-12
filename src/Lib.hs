@@ -11,6 +11,9 @@ import System.Directory
 import System.IO
 import Data.Char
 
+type Todo = String
+type TodoNumber = Int
+
 -- filename of the todo file
 fileName :: String
 fileName = ".todo"
@@ -28,7 +31,7 @@ createTodoFile = do
     writeFile file ""
 
 -- adds a todo
-addTodo :: String -> IO ()
+addTodo :: Todo -> IO ()
 addTodo x = do
     file <- todoFile
     appendFile file $ x ++ "\n"
@@ -44,15 +47,15 @@ printFile = do
 
 -- print the todolist
 -- #. TODOENTRY
-printTodos :: [(Int, String)] -> IO ()
+printTodos :: [(TodoNumber, Todo)] -> IO ()
 printTodos xs = mapM_ (\(a, b) -> putStrLn $ show a ++ ". " ++ b) xs
 
 -- generates a numbered list to identify todos
-generateNumberedList :: String -> [(Int, String)]
+generateNumberedList :: String -> [(TodoNumber, Todo)]
 generateNumberedList = zip [1 ..] . lines 
 
 -- deletes a todo from a list
-removeTodo :: Int -> IO ()
+removeTodo :: TodoNumber -> IO ()
 removeTodo x = do
     file <- todoFile
     contents <- fmap lines $ readFile file
