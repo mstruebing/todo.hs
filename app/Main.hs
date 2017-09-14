@@ -49,7 +49,7 @@ addOrShowTodos (_, _) = printFile
 
 deleteTodos :: IO ()
 deleteTodos = do
-    putStrLn "Are you sure to delete all your todos? [Y/N]"
+    putStrLn "Are you sure to delete all your todos? [y/N]"
     input <- getChar
     if ((toUpper input) == 'Y')
     then
