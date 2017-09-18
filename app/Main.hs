@@ -49,29 +49,39 @@ addOrShowTodos (_, _) = printFile
 
 deleteTodos :: IO ()
 deleteTodos = do
-    putStrLn "Are you sure to delete all your todos? [y/N]"
-    input <- getChar
-    if ((toUpper input) == 'Y')
-    then
-        createTodoFile
-    else
-        return ()
+    askToOverwriteFile "Are you sure to delete all your todos?"
+
+-- same as
+-- input <- getChar
+-- if ((toUpper input) == 'Y')
+-- then
+--     createTodoFile
+-- else
+--     return ()
 
 -- executes a function if a todo file is available
 executeFunction :: (a -> IO ()) -> a -> IO ()
-executeFunction f x = do
-    fileAvailable <- todoFileAvailable
-    if fileAvailable then f x else askToCreateFile
+executeFunction f x = todoFileAvailable >>= (\fileAvailable -> if fileAvailable then f x else noFileAvailable)
 
--- asks the user if a todo file should be created
-askToCreateFile :: IO ()
-askToCreateFile = do
+-- same as
+-- fileAvailable <- todoFileAvailable
+-- if fileAvailable then f x else askToCreateFile
+
+noFileAvailable :: IO ()
+noFileAvailable = do
     putStrLn "No todo file is available(~/.todo)"
-    putStrLn "Would you like to create one? [Y/N]"
-    input <- getChar
-    if ((toUpper input) == 'Y')
-    then
-        createTodoFile
-    else
-        return ()
+    askToOverwriteFile "Would you like to create one?"
+
+askToOverwriteFile :: String -> IO ()
+askToOverwriteFile question = do
+    putStrLn $ question ++ " [y/N]"
+    getChar >>= (\char -> if toUpper char == 'Y' then createTodoFile else return ())
+
+    -- same as
+    -- input <- getChar
+    -- if ((toUpper input) == 'Y')
+    -- then
+    --     createTodoFile
+    -- else
+    --     return ()
 

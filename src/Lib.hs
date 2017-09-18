@@ -20,30 +20,31 @@ fileName = ".todo"
 
 -- filepath of the todo file
 todoFile :: IO FilePath
-todoFile = do
-    homeDir <- getHomeDirectory
-    pure (homeDir ++ "/" ++ fileName)
+todoFile = fmap (\homeDir -> homeDir ++ "/" ++ fileName) getHomeDirectory
+
+-- same as 
+-- todoFile = do 
+-- homeDir <- getHomeDirectory 
+-- pure (homeDir ++ "/" ++ fileName)
 
 -- creates the todo file with a sample entry
 createTodoFile :: IO ()
-createTodoFile = do
-    file <- todoFile
-    writeFile file ""
+createTodoFile = todoFile >>= (\file -> writeFile file "")
+
+-- same as 
+-- createTodoFile = do 
+-- file <- todoFile 
+-- writeFile file ""
 
 -- adds a todo
 addTodo :: Todo -> IO ()
-addTodo x = do
-    file <- todoFile
-    appendFile file $ x ++ "\n"
+addTodo todo = todoFile >>= (\file -> appendFile file $ todo ++ "\n")
 
 -- prints the content of the todo file
 printFile :: IO ()
-printFile = do
-    file <- todoFile
-    withFile file ReadMode (\handle -> do
-        hSetBuffering handle $ LineBuffering
-        contents <- hGetContents handle
-        printTodos $ generateNumberedList contents)
+printFile = todoFile >>= (\file -> withFile file ReadMode (\handle -> do
+            hSetBuffering handle $ LineBuffering
+            printTodos . generateNumberedList =<< hGetContents handle))
 
 -- print the todolist
 -- #. TODOENTRY
